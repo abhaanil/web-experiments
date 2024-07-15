@@ -253,3 +253,68 @@ function getColumnName(index) {
   }
   return name;
 }
+
+function mousePressed() {
+  let x = 0;
+  let y = 0;
+
+  // Check for column drag (only in the first row) and exclude the null column
+  if (mouseY < rowHeights[0] && mouseX > colWidths[0]) {
+    for (let i = 1; i < cols; i++) { // Start from 1 to exclude the null column
+      x += colWidths[i - 1];
+      if (mouseX > x - 5 && mouseX < x + 5) {
+        dragCol = i;
+        offsetX = mouseX - x;
+        dragging = true;
+        return;
+      }
+    }
+  }
+
+  // Check for row drag (only in the first column) and exclude the null row
+  if (mouseX < colWidths[0] && mouseY > rowHeights[0]) {
+    for (let j = 1; j < rows; j++) { // Start from 1 to exclude the null row
+      y += rowHeights[j - 1];
+      if (mouseY > y - 5 && mouseY < y + 5) {
+        dragRow = j;
+        offsetY = mouseY - y;
+        dragging = true;
+        return;
+      }
+    }
+  }
+
+  // Check for cell click to change color and shape
+  x = 0;
+  for (let i = 0; i < cols; i++) {
+    y = 0;
+    for (let j = 0; j < rows; j++) {
+      // Skip the cells in the first row and first column
+      if (i == 0 || j == 0) {
+        y += rowHeights[j];
+        continue;
+      }
+      if (mouseX > x && mouseX < x + colWidths[i] && mouseY > y && mouseY < y + rowHeights[j]) {
+        if (cellColors[i][j].toString() === selectedColor.toString() && cellShapes[i][j] === drawShape) {
+          cellColors[i][j] = color(255); // Toggle back to white
+          cellShapes[i][j] = 'rect'; // Toggle back to default shape
+        } else if (cellShapes[i][j] === 'triangleTopLeft') {
+          cellShapes[i][j] = 'triangleTopRight';
+        } else if (cellShapes[i][j] === 'triangleTopRight') {
+          cellShapes[i][j] = 'triangleBottomRight';
+        } else if (cellShapes[i][j] === 'triangleBottomRight') {
+          cellShapes[i][j] = 'triangleBottomLeft';
+        } else if (cellShapes[i][j] === 'triangleBottomLeft') {
+          cellColors[i][j] = color(255); // Toggle back to white
+          cellShapes[i][j] = 'rect'; // Toggle back to default shape
+        } else {
+          cellColors[i][j] = selectedColor;
+          cellShapes[i][j] = drawShape === 'triangle' ? 'triangleTopLeft' : drawShape;
+        }
+        return; // Exit after finding the cell
+      }
+      y += rowHeights[j];
+    }
+    x += colWidths[i];
+  }
+}
