@@ -117,3 +117,42 @@ button {
     
 }
 
+.question-mark-container {
+    position: fixed;
+    top: 22%;
+}
+
+.question-mark {
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00000000;
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-style: italic;
+
+}
+
+.text-box {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: #ffffff;
+    padding: 10px;
+    width: 400px;
+}
+
+.text{
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-style: italic;
+}
+

@@ -44,3 +44,12 @@ function removeImage(imageId) {
         box.remove();
     }
 }
+
+function toggleTextBox() {
+    var textBox = document.getElementById('textBox');
+    if (textBox.style.display === 'block') {
+        textBox.style.display = 'none';
+    } else {
+        textBox.style.display = 'block';
+    }
+}
