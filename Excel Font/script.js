@@ -13,7 +13,7 @@ let selectedColor;
 let drawShape = 'rect'; // Variable to store the current shape
 
 function setup() {
-  createCanvas(1500, 700);
+  createCanvas(1900, 730);
   // Initialize column widths and row heights
   for (let i = 0; i < cols; i++) {
     colWidths[i] = 10000 / cols;
@@ -40,24 +40,30 @@ function setup() {
   // Set default selected color
   selectedColor = color(0); // Default to black
 
-  // Create buttons for shapes
+  // Create and arrange buttons vertically
   let roundBtn = createButton('Round');
-  roundBtn.position(10, height + 10);
-  roundBtn.mousePressed(() => drawShape = 'circle');
+  roundBtn.position(30, height + 180); // First button at initial position
+  roundBtn.style('width', '60px'); // Optional: Set a consistent width
+  
 
   let triangleBtn = createButton('Triangle');
-  triangleBtn.position(70, height + 10);
-  triangleBtn.mousePressed(() => drawShape = 'triangle');
+  triangleBtn.position(100, height + 180); // Positioned 40px below the first button
+  triangleBtn.style('width', '60px');
 
   let fillBtn = createButton('Fill');
-  fillBtn.position(140, height + 10);
+  fillBtn.position(170, height + 180); // Positioned 40px below the second button
+  fillBtn.style('width', '60px');
+
+  // Button functionality
+  roundBtn.mousePressed(() => drawShape = 'circle');
+  triangleBtn.mousePressed(() => drawShape = 'triangle');
   fillBtn.mousePressed(() => drawShape = 'rect');
 
-  // Create color swatches
-  createSwatch(color(0, 0, 0), 10, height + 50); // Black
-  createSwatch(color(78, 78, 78), 40, height + 50); // Dark Grey
-  createSwatch(color(150, 150, 150), 70, height + 50); // Grey
-  createSwatch(color(230, 230, 230), 100, height + 50); // Light Grey
+  // Create color swatches below the buttons
+  createSwatch(color(0, 0, 0), 240, height + 180); // Black
+  createSwatch(color(78, 78, 78), 265, height + 180); // Dark Grey
+  createSwatch(color(150, 150, 150), 290, height + 180); // Grey
+  createSwatch(color(230, 230, 230), 315, height + 180); // Light Grey
 
   // Add event listener to the download button
   let downloadBtn = select('#downloadBtn');
@@ -225,8 +231,8 @@ function mouseReleased() {
 
 function createSwatch(col, x, y) {
   let swatch = createDiv('');
-  swatch.style('width', '30px');
-  swatch.style('height', '30px');
+  swatch.style('width', '20px');
+  swatch.style('height', '20px');
   swatch.style('background-color', col);
   swatch.position(x, y);
   swatch.mousePressed(() => selectedColor = col);
@@ -318,3 +324,8 @@ function mousePressed() {
     x += colWidths[i];
   }
 }
+
+function windowResized() {
+    resizeCanvas(windowWidth * 0.9, windowHeight * 0.8);
+    drawGrid();
+  }
