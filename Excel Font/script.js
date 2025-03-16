@@ -2,78 +2,130 @@ let cols = 90;
 let rows = 90;
 let colWidths = [];
 let rowHeights = [];
-let cellColors = []; // Array to store the colors of each cell
-let cellShapes = []; // Array to store the shape of each cell
+let cellColors = [];
+let cellShapes = [];
 let dragCol = -1;
 let dragRow = -1;
 let offsetX = 0;
 let offsetY = 0;
-let dragging = false; // Flag to indicate if dragging is happening
+let dragging = false;
 let selectedColor;
-let drawShape = 'rect'; // Variable to store the current shape
+let drawShape = 'rect';
+let roundBtn, triangleBtn, fillBtn; // Store buttons globally
+let blackBtn, darkGreyBtn, greyBtn, lightGreyBtn; // Swatches as buttons
+
+
+let cnv; // Canvas variable
 
 function setup() {
-  createCanvas(1900, 730);
-  // Initialize column widths and row heights
-  for (let i = 0; i < cols; i++) {
-    colWidths[i] = 10000 / cols;
-  }
-  for (let j = 0; j < rows; j++) {
-    rowHeights[j] = 3000 / rows;
-  }
+  // Create the p5.js canvas
+  cnv = createCanvas(windowWidth * 0.9, windowHeight * 0.75);
+  cnv.parent('canvasContainer');
 
-  // Initialize cell colors to white and shapes to rectangle
+  // Ensure canvas resizes on page load
+  resizeCanvasToFit();
+  window.addEventListener('resize', resizeCanvasToFit);
+
+  // Initialize grid setup
+  for (let i = 0; i < cols; i++) colWidths[i] = 10000 / cols;
+  for (let j = 0; j < rows; j++) rowHeights[j] = 3000 / rows;
+
   for (let i = 0; i < cols; i++) {
     cellColors[i] = [];
     cellShapes[i] = [];
     for (let j = 0; j < rows; j++) {
-      if (j == 0 || i == 0) {
-        cellColors[i][j] = color(33, 115, 70); // Green color for the first row and first column
-        cellShapes[i][j] = 'rect'; // Default shape
-      } else {
-        cellColors[i][j] = color(255);
-        cellShapes[i][j] = 'rect'; // Default shape
-      }
+      cellColors[i][j] = j == 0 || i == 0 ? color(33, 115, 70) : color(255);
+      cellShapes[i][j] = 'rect';
     }
   }
 
-  // Set default selected color
-  selectedColor = color(0); // Default to black
+  selectedColor = color(0);
 
-  // Create and arrange buttons vertically
-  let roundBtn = createButton('Round');
-  roundBtn.position(30, height + 180); // First button at initial position
-  roundBtn.style('width', '60px'); // Optional: Set a consistent width
-  
+  // Create shape buttons
+  roundBtn = createButton('Round');
+  triangleBtn = createButton('Triangle');
+  fillBtn = createButton('Fill');
 
-  let triangleBtn = createButton('Triangle');
-  triangleBtn.position(100, height + 180); // Positioned 40px below the first button
-  triangleBtn.style('width', '60px');
+  // Style buttons
+  roundBtn.style('width', '80px');
+  roundBtn.style('border', '1px solid black');
+  triangleBtn.style('width', '80px');
+  triangleBtn.style('border', '1px solid black');
+  fillBtn.style('width', '80px');
+  fillBtn.style('border', '1px solid black');
 
-  let fillBtn = createButton('Fill');
-  fillBtn.position(170, height + 180); // Positioned 40px below the second button
-  fillBtn.style('width', '60px');
-
-  // Button functionality
+  // Set click actions
   roundBtn.mousePressed(() => drawShape = 'circle');
+
   triangleBtn.mousePressed(() => drawShape = 'triangle');
+
   fillBtn.mousePressed(() => drawShape = 'rect');
 
-  // Create color swatches below the buttons
-  createSwatch(color(0, 0, 0), 240, height + 180); // Black
-  createSwatch(color(78, 78, 78), 265, height + 180); // Dark Grey
-  createSwatch(color(150, 150, 150), 290, height + 180); // Grey
-  createSwatch(color(230, 230, 230), 315, height + 180); // Light Grey
 
-  // Add event listener to the download button
+  // Create color buttons (swatches)
+  blackBtn = createColorButton(color(0, 0, 0));        // Black
+  darkGreyBtn = createColorButton(color(78, 78, 78));  // Dark Grey
+  greyBtn = createColorButton(color(150, 150, 150));   // Grey
+  lightGreyBtn = createColorButton(color(230, 230, 230)); // Light Grey
+
+  // Position buttons & color swatches
+  positionControls();
+
   let downloadBtn = select('#downloadBtn');
   downloadBtn.mousePressed(downloadCanvas);
+}
+
+// Function to correctly position buttons (shapes + colors)
+function positionControls() {
+  let canvasBottom = cnv.position().y + height + 20; // 20px padding below canvas
+  let leftOffset = cnv.position().x; // Align with canvas left side
+
+  // Position shape buttons
+  roundBtn.position(leftOffset, canvasBottom);
+  triangleBtn.position(leftOffset + 90, canvasBottom);
+  fillBtn.position(leftOffset + 180, canvasBottom);
+
+  // Position color buttons next to shape buttons
+  let colorOffset = leftOffset + 280; // Place color buttons after shape buttons
+  blackBtn.position(colorOffset, canvasBottom);
+  darkGreyBtn.position(colorOffset + 90, canvasBottom);
+  greyBtn.position(colorOffset + 180, canvasBottom);
+  lightGreyBtn.position(colorOffset + 270, canvasBottom);
+}
+
+// Function to create color buttons
+function createColorButton(col) {
+  let btn = createButton('');
+  btn.style('width', '80px');
+  btn.style('height', '23px');
+  btn.style('background-color', col.toString('#rrggbb')); // Convert p5 color to hex
+  btn.style('border-radius', '3px'); // Rounded corners
+  btn.style('border', '1px solid black');
+  btn.mousePressed(() => selectedColor = col); // Change color on click
+
+  return btn;
+}
+
+// Ensure canvas resizes properly and reposition buttons
+function resizeCanvasToFit() {
+  resizeCanvas(windowWidth * 0.9, windowHeight * 0.75);
+  positionControls(); // Reposition everything when resizing
+}
+
+function windowResized() {
+  resizeCanvasToFit();
 }
 
 function draw() {
   background(255);
   drawGrid();
 }
+
+// Function to ensure canvas resizes properly
+function resizeCanvasToFit() {
+  resizeCanvas(windowWidth * 0.9, windowHeight * 0.8);
+}
+
 
 function drawGrid() {
   let x = 0;
@@ -177,7 +229,6 @@ function mousePressed() {
   for (let i = 0; i < cols; i++) {
     y = 0;
     for (let j = 0; j < rows; j++) {
-      // Skip the cells in the first row and first column
       if (i == 0 || j == 0) {
         y += rowHeights[j];
         continue;
@@ -196,13 +247,14 @@ function mousePressed() {
           cellColors[i][j] = selectedColor;
           cellShapes[i][j] = drawShape === 'triangle' ? 'triangleTopLeft' : drawShape;
         }
-        return; // Exit after finding the cell
+        return;
       }
       y += rowHeights[j];
     }
     x += colWidths[i];
   }
 }
+
 
 function mouseDragged() {
   // Set dragging flag to true if mouse is moved while pressed
@@ -326,6 +378,6 @@ function mousePressed() {
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth * 0.9, windowHeight * 0.8);
-    drawGrid();
-  }
+  resizeCanvas(windowWidth * 0.9, windowHeight * 0.8);
+  drawGrid();
+}
