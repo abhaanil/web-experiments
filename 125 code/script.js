@@ -53,3 +53,17 @@ function toggleTextBox() {
         textBox.style.display = 'block';
     }
 }
+
+
+// Enter key submission
+document.getElementById('image-name').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        checkImageName();
+    }
+});
+
+// Run this once to set the correct layering:
+document.querySelectorAll('.hidden-image').forEach((img, index) => {
+    img.style.zIndex = index + 1; // ensures layering matches HTML order exactly
+});
