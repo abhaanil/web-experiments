@@ -1,12 +1,10 @@
-/* styles.css */
+html,
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    align-items: right;
     height: 100vh;
     margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
     background-color: white;
 }
 
@@ -14,80 +12,99 @@ body {
     position: absolute;
     top: 10px;
     left: 10px;
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-    width: 200px; /* Adjust size as needed */
+    width: 200px;
     height: 200px;
+    cursor: pointer;
+    z-index: 10;
 }
 
 .logoo {
     width: 100%;
     height: 100%;
-    display: block; /* Ensure block display to cover clickable area */
+    display: block;
     pointer-events: auto;
 }
 
 .page {
     display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100% - 180px);
+    padding-top: 180px;
+    gap: 10px;
+}
+
+.left-container {
+    flex: 7;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.right-container {
+    flex: 3;
+    background-color: rgb(255, 255, 255);
+    overflow-y: auto;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
     flex-direction: column;
-    padding-top: 250px;
-    padding-right: 90px;
 }
 
-.container {
-    position: fixed;
-    top: 2.5%;
-    left: 5%;
-}
-
-.foreground img,
-.hidden-image {
-    top: 0%;
-    left: 0%;
-    width: 900px;
-    height: 900px;
-    
-}
-
+.hidden-images,
 .foreground {
     position: absolute;
+    inset: 0;
+    display: block;
+}
+
+
+.hidden-image,
+.foreground img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: translate(0%, -13%);
+}
+
+.foreground img {
+    z-index: 999;
 }
 
 .hidden-image {
-    position: absolute;
     display: none;
 }
 
 .textbox-container {
-    
     gap: 10px;
+    margin-top: 10px;
+    max-width: 300px;
 }
 
 #image-name::placeholder {
-    
     font-style: italic;
 }
 
 input[type="text"] {
     border: 1px solid #000;
-    border-radius: 10px;
-
+    border-radius: 40px;
     padding: 10px;
     font-size: 16px;
-    width: 500px;
+    width: 300px;
 }
 
 button {
-    border-radius: 10px;
-    border: 1px solid ;
+    border-radius: 40px;
+    border: 1px solid;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
 }
 
 .floating-box-container {
-    
-    /* display: flex;
-    flex-direction: row; */
     gap: 10px;
 }
 
@@ -96,15 +113,13 @@ button {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border: none;
     border-radius: 100px;
     background-color: #cfcfcf;
     width: 200px;
     white-space: nowrap;
     height: 15px;
     font-size: 12px;
-    color:rgb(86, 86, 86) ;
-    
+    color: rgb(86, 86, 86);
 }
 
 .floating-box .close-btn {
@@ -112,30 +127,26 @@ button {
     border: none;
     background: none;
     font-size: 12px;
-    color:rgb(86, 86, 86) ;
-    
-    
+    color: rgb(86, 86, 86);
 }
 
 .question-mark-container {
-    position: fixed;
-    top: 22%;
+    position: relative;
+    margin-bottom: 50px;
 }
 
 .question-mark {
     font-size: 24px;
     cursor: pointer;
-    border: none;
     width: 30px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #00000000;
+    background-color: transparent;
     font-family: "Space Mono", monospace;
     font-weight: 400;
     font-style: italic;
-
 }
 
 .text-box {
@@ -147,12 +158,11 @@ button {
     border-radius: 20px;
     background-color: #ffffff;
     padding: 10px;
-    width: 400px;
+    width: 300px;
 }
 
-.text{
+.text {
     font-family: "Space Mono", monospace;
     font-weight: 400;
     font-style: italic;
 }
-
